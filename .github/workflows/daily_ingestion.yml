@@ -1,4 +1,4 @@
-name: Daily Mutual Fund Ingestion
+name: Live Mutual Fund Data Ingestion
 
 on:
   schedule:
