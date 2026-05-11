@@ -1,0 +1,29 @@
+intents:
+  - id: advisory
+    description: "Requests for investment advice, 'should I buy', or 'where to invest'"
+    patterns:
+      - "should i invest in"
+      - "is it a good time to buy"
+      - "give me investment advice"
+      - "where should i put my money"
+    response: "I am a facts-only assistant and cannot provide investment advice or recommendations. You can find objective details about this fund here: "
+
+  - id: comparison
+    description: "Requests to compare multiple funds or find the 'best' one"
+    patterns:
+      - "which fund is better"
+      - "compare x with y"
+      - "best midcap fund"
+      - "versus"
+    response: "I am designed to provide facts for individual schemes and cannot perform comparisons or rank funds. Please refer to the official scheme page for objective data: "
+
+  - id: prediction
+    description: "Requests for future returns or market performance predictions"
+    patterns:
+      - "what will be the return"
+      - "expected performance"
+      - "future growth"
+      - "will it go up"
+    response: "Mutual fund investments are subject to market risks. I cannot predict future returns or performance. You can check the historical factsheet here: "
+
+default_refusal: "I'm sorry, but I can only answer objective, factual questions based on the scheme's official documents. Facts-only. No investment advice."

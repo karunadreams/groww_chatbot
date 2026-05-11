@@ -1,0 +1,23 @@
+pii_patterns:
+  - id: pan_card
+    regex: "[A-Z]{5}[0-9]{4}[A-Z]{1}"
+    description: "Indian PAN Card Number"
+
+  - id: aadhaar_card
+    regex: "^[2-9]{1}[0-9]{3}\\s[0-9]{4}\\s[0-9]{4}$"
+    description: "Aadhaar Card Number (with spaces)"
+
+  - id: email_address
+    regex: "[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+"
+    description: "Standard Email Format"
+
+  - id: phone_number
+    regex: "(\\+91[\\-\\s]?)?[0]?(91)?[789]\\d{9}"
+    description: "Indian Mobile Number"
+
+  - id: otp
+    regex: "\\b\\d{4,6}\\b"
+    description: "4-6 digit numerical codes (potential OTPs)"
+
+redaction_mask: "[REDACTED]"
+block_message: "Your request contains sensitive personal information (PII) and has been blocked for your security. Please do not share PAN, Aadhaar, or contact details."

@@ -1,0 +1,44 @@
+name: Daily Mutual Fund Ingestion
+
+on:
+  schedule:
+    - cron: '30 4 * * *' # Daily at 10:00 AM IST (04:30 UTC)
+  workflow_dispatch: # Allows manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # Specific install for rank_bm25 as it's our current fallback
+          pip install rank_bm25
+
+      - name: Install Playwright Browsers
+        run: |
+          pip install playwright
+          playwright install chromium
+
+      - name: Run Refresh Cycle
+        run: python -m src.mf_faq.ingestion.refresh
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/ index/
+          git commit -m "Automated Daily Ingestion: $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git push

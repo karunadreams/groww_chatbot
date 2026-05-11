@@ -1,0 +1,32 @@
+# Core Dependencies
+httpx
+playwright
+beautifulsoup4
+trafilatura
+langchain
+llama-index
+sentence-transformers
+faiss-cpu
+rank_bm25
+pandas
+pyarrow
+pydantic
+python-dotenv
+pyyaml
+
+# LLM APIs
+openai
+anthropic
+groq
+
+# UI
+streamlit
+fastapi
+uvicorn
+
+# Testing & Quality
+pytest
+pytest-asyncio
+black
+isort
+flake8

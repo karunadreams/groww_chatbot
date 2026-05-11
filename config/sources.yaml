@@ -1,0 +1,38 @@
+schemes:
+  - id: hdfc_mid_cap
+    name: HDFC Mid-Cap Opportunities Fund - Direct Growth
+    category: Mid Cap
+    sources:
+      - url: https://groww.in/mutual-funds/hdfc-mid-cap-fund-direct-growth
+        doc_type: Product_Page
+
+  - id: hdfc_equity
+    name: HDFC Flexi Cap Fund - Direct Growth
+    category: Flexi Cap
+    sources:
+      - url: https://groww.in/mutual-funds/hdfc-equity-fund-direct-growth
+        doc_type: Product_Page
+
+  - id: hdfc_focused
+    name: HDFC Focused 30 Fund - Direct Growth
+    category: Focused
+    sources:
+      - url: https://groww.in/mutual-funds/hdfc-focused-fund-direct-growth
+        doc_type: Product_Page
+
+  - id: hdfc_elss
+    name: HDFC ELSS Tax Saver Fund - Direct Plan Growth
+    category: ELSS
+    sources:
+      - url: https://groww.in/mutual-funds/hdfc-elss-tax-saver-fund-direct-plan-growth
+        doc_type: Product_Page
+
+  - id: hdfc_large_cap
+    name: HDFC Top 100 Fund - Direct Growth
+    category: Large Cap
+    sources:
+      - url: https://groww.in/mutual-funds/hdfc-large-cap-fund-direct-growth
+        doc_type: Product_Page
+
+# Hard rule: any URL not present in this file MUST NOT appear in any answer.
+# Compliance gate (Phase 5) fails if a generated answer cites a URL outside this list.

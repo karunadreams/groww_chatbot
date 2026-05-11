@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grow RAG | Desktop Intelligence Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;family=Space+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for deep charcoal interface */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0e150e; }
+        ::-webkit-scrollbar-thumb { background: #3d4a3d; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4be277; }
+        
+        /* Glassmorphism effects */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .ai-pulse {
+            background: radial-gradient(circle, #4be277 0%, #4cd7f6 100%);
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error-container": "#ffdad6",
+                      "inverse-surface": "#dce5d9",
+                      "on-primary-fixed-variant": "#005321",
+                      "tertiary": "#ffb5ab",
+                      "error-container": "#93000a",
+                      "on-primary-fixed": "#002109",
+                      "surface-tint": "#4ae176",
+                      "outline-variant": "#3d4a3d",
+                      "surface-container-highest": "#2f372e",
+                      "primary-container": "#22c55e",
+                      "on-secondary-container": "#00424e",
+                      "on-surface-variant": "#bccbb9",
+                      "on-secondary": "#003640",
+                      "on-primary": "#003915",
+                      "surface": "#0e150e",
+                      "secondary-fixed": "#acedff",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "secondary-container": "#03b5d3",
+                      "on-tertiary": "#60130d",
+                      "on-surface": "#dce5d9",
+                      "on-tertiary-container": "#76231b",
+                      "secondary": "#4cd7f6",
+                      "surface-container-low": "#161d16",
+                      "on-primary-container": "#004b1e",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "surface-dim": "#0e150e",
+                      "outline": "#869585",
+                      "tertiary-fixed": "#ffdad5",
+                      "surface-container": "#1a221a",
+                      "error": "#ffb4ab",
+                      "surface-variant": "#2f372e",
+                      "surface-container-high": "#242c24",
+                      "tertiary-container": "#ff8b7c",
+                      "on-secondary-fixed": "#001f26",
+                      "on-tertiary-fixed": "#410001",
+                      "background": "#0e150e",
+                      "on-background": "#dce5d9",
+                      "inverse-primary": "#006e2f",
+                      "surface-container-lowest": "#091009",
+                      "surface-bright": "#333b33",
+                      "on-error": "#690005",
+                      "primary": "#4be277",
+                      "primary-fixed": "#6bff8f",
+                      "inverse-on-surface": "#2a322a",
+                      "tertiary-fixed-dim": "#ffb4a9",
+                      "on-tertiary-fixed-variant": "#7f2a21",
+                      "primary-fixed-dim": "#4ae176"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "margin-mobile": "16px",
+                      "stack-sm": "8px",
+                      "unit": "4px",
+                      "container-max": "1440px",
+                      "stack-md": "16px",
+                      "stack-lg": "32px",
+                      "margin-desktop": "40px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Geist"],
+                      "display": ["Geist"],
+                      "headline-lg": ["Geist"],
+                      "body-md": ["Inter"],
+                      "label-caps": ["Geist"],
+                      "headline-lg-mobile": ["Geist"],
+                      "mono": ["Space Mono"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-md": ["20px", {"lineHeight": "1.4", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                      "display": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                      "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "mono": ["13px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}],
+                      "body-lg": ["16px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden">
+<!-- Desktop Sidebar -->
+<aside class="h-full w-72 fixed left-0 top-0 hidden md:flex flex-col border-r border-outline-variant/10 bg-surface/80 backdrop-blur-xl z-50">
+<div class="flex flex-col h-full p-6">
+<!-- Brand Header -->
+<div class="mb-10">
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">Grow RAG</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant tracking-widest mt-1">Enterprise Tier</p>
+</div>
+<!-- Main Navigation -->
+<nav class="space-y-1 mb-8">
+<button class="w-full text-primary dark:text-primary bg-primary/10 border-l-4 border-primary flex items-center gap-3 px-4 py-3 font-headline-md text-headline-md active:scale-[0.98] transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="add_comment">add_comment</span>
+<span>New Chat</span>
+</button>
+<button class="w-full text-on-surface-variant flex items-center gap-3 px-4 py-3 font-body-md text-body-md hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span>History</span>
+</button>
+<button class="w-full text-on-surface-variant flex items-center gap-3 px-4 py-3 font-body-md text-body-md hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span>Knowledge Base</span>
+</button>
+<button class="w-full text-on-surface-variant flex items-center gap-3 px-4 py-3 font-body-md text-body-md hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Team</span>
+</button>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant/10">
+<button class="w-full text-on-surface-variant flex items-center gap-3 px-4 py-3 font-body-md text-body-md hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</button>
+<div class="mt-6 glass-panel rounded-xl p-4 flex items-center gap-3">
+<div class="h-10 w-10 rounded-lg bg-surface-container-highest overflow-hidden">
+<img alt="Workspace Icon" class="h-full w-full object-cover grayscale opacity-80" data-alt="A professional portrait of a senior technology executive in a dark, minimalist office setting. The lighting is low-key with high-contrast shadows, reflecting a serious and authoritative atmosphere. The executive has a focused expression, wearing a tailored charcoal suit that blends into the deep emerald and black background, symbolizing enterprise-level precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCT20oGwWSuRUKhmrehe1Ka_p-U67bQxdfk6YYeseNRnwDlEibJx7wwvPB8f4IvNE2SWba_Ctz24jOC8r1D36xTCrEmfD3zeE4nICPXAeH89nAGv_LD8asga7wrTvIpBBXj3e78_dkxS2KFglAtAkmdfEWcLCmYXuuOO3qWNFtRUAvyd61NqL-hPQZDXiqpzIZipFkApvA9xCeJrJXH1XqLpNi8mb1ulmvOQGkI2zElPff0iCoQAYGyz4VTshfQ8KEEBU5BRrSP3L6V"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">Alex Rivera</p>
+<p class="text-[10px] text-primary uppercase font-bold tracking-tighter">Upgrade Plan</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top AppBar -->
+<header class="fixed top-0 w-full z-40 backdrop-blur-2xl border-b border-outline-variant/10 flex justify-between items-center h-12 px-margin-desktop md:pl-80 bg-surface/80">
+<div class="flex items-center gap-6">
+<span class="font-display text-headline-md font-semibold text-primary">Grow RAG</span>
+<div class="hidden lg:flex items-center gap-4">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">Models</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">API</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="#">Docs</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="bg-surface-container-low border-none rounded-full h-8 pl-10 pr-4 text-xs w-48 focus:ring-1 focus:ring-primary" placeholder="Global Search..." type="text"/>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-opacity active:opacity-80" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-opacity active:opacity-80" data-icon="account_circle">account_circle</span>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="h-screen pt-12 pb-24 md:pl-72 flex flex-col relative">
+<div class="flex-1 flex overflow-hidden">
+<!-- Central Chat Canvas -->
+<div class="flex-1 h-full overflow-y-auto px-6 py-10 max-w-4xl mx-auto w-full space-y-10 scroll-smooth">
+<!-- User Message -->
+<div class="flex gap-6 max-w-3xl">
+<div class="h-10 w-10 shrink-0 rounded-lg bg-surface-container p-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="person">person</span>
+</div>
+<div class="space-y-2">
+<p class="font-label-caps text-label-caps text-on-surface-variant">YOU • 2M AGO</p>
+<p class="text-body-lg font-body-lg text-on-surface leading-relaxed">Analyze the Q3 financial performance of the sustainable energy division and identify the primary drivers for the 15% revenue increase compared to last year. Please cite internal reports only.</p>
+</div>
+</div>
+<!-- AI Response -->
+<div class="flex gap-6">
+<div class="h-10 w-10 shrink-0 rounded-lg bg-primary-container p-2 flex items-center justify-center relative overflow-hidden">
+<div class="ai-pulse absolute inset-0 opacity-40"></div>
+<span class="material-symbols-outlined text-on-primary-container relative z-10" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="flex-1 space-y-4">
+<p class="font-label-caps text-label-caps text-primary">GROW AI • JUST NOW</p>
+<div class="glass-panel rounded-2xl p-6 text-on-surface leading-relaxed border-l-4 border-primary shadow-2xl">
+<p class="mb-4">The sustainable energy division achieved a significant revenue surge in Q3, totaling <strong>$42.8M</strong>. Based on internal RAG retrieval from the <span class="text-secondary border-b border-secondary/30 cursor-pointer">FY23_Q3_Strategic_Review.pdf</span>, the 15% year-over-year increase is attributed to three critical drivers:</p>
+<ul class="space-y-3 list-none">
+<li class="flex gap-3">
+<span class="text-primary font-bold">01.</span>
+<span><strong>Photovoltaic Component Efficiency:</strong> Adoption of the Gen-5 silicon wafers reduced manufacturing overhead by 22%.</span>
+</li>
+<li class="flex gap-3">
+<span class="text-primary font-bold">02.</span>
+<span><strong>Contract Renewals:</strong> Successful negotiation of the Nordic Grid expansion project contributed $8.2M in new realized billing.</span>
+</li>
+<li class="flex gap-3">
+<span class="text-primary font-bold">03.</span>
+<span><strong>Supply Chain Optimization:</strong> On-shoring rare earth mineral processing eliminated logistical delays previously observed in Q1 and Q2.</span>
+</li>
+</ul>
+<div class="mt-6 flex gap-2">
+<span class="px-2 py-1 bg-primary/10 border border-primary/20 rounded text-[10px] text-primary font-mono uppercase">Verified Accuracy</span>
+<span class="px-2 py-1 bg-secondary/10 border border-secondary/20 rounded text-[10px] text-secondary font-mono uppercase">Internal Sources: 4</span>
+</div>
+</div>
+<!-- Secondary suggestion bento -->
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 border border-outline-variant/10 rounded-xl hover:border-primary/30 transition-all cursor-pointer group">
+<p class="text-xs text-on-surface-variant group-hover:text-primary transition-colors">Compare with Q2 performance?</p>
+</div>
+<div class="p-4 border border-outline-variant/10 rounded-xl hover:border-primary/30 transition-all cursor-pointer group">
+<p class="text-xs text-on-surface-variant group-hover:text-primary transition-colors">Generate forecast for Q4?</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Sidebar: Source Retrieval Panel -->
+<aside class="hidden xl:flex w-80 h-full flex-col border-l border-outline-variant/10 bg-surface-container-low p-6 gap-6">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="description">description</span>
+                        Sources
+                    </h3>
+<span class="text-[10px] font-mono text-on-surface-variant">RAG-LATENCY: 420ms</span>
+</div>
+<div class="space-y-4">
+<!-- Source Card 1 -->
+<div class="p-4 rounded-xl bg-surface/50 border border-outline-variant/10 relative overflow-hidden group hover:border-secondary transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] rounded font-bold uppercase">Confidence: 98%</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="open_in_new">open_in_new</span>
+</div>
+<p class="text-xs font-semibold text-on-surface truncate">FY23_Q3_Strategic_Review.pdf</p>
+<p class="text-[11px] text-on-surface-variant mt-2 line-clamp-2 italic">"...the 15% increase is largely due to the implementation of Gen-5 silicon wafers and the Nordic Grid contract..."</p>
+<div class="mt-3 flex items-center gap-2">
+<div class="flex-1 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[98%]"></div>
+</div>
+</div>
+</div>
+<!-- Source Card 2 -->
+<div class="p-4 rounded-xl bg-surface/50 border border-outline-variant/10 relative overflow-hidden group hover:border-secondary transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] rounded font-bold uppercase">Confidence: 84%</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="open_in_new">open_in_new</span>
+</div>
+<p class="text-xs font-semibold text-on-surface truncate">Supply_Chain_Optimization_Report.xls</p>
+<p class="text-[11px] text-on-surface-variant mt-2 line-clamp-2 italic">"...on-shoring rare earth mineral processing reduced logistics lead times by 34%..."</p>
+<div class="mt-3 flex items-center gap-2">
+<div class="flex-1 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[84%]"></div>
+</div>
+</div>
+</div>
+<!-- Source Card 3 -->
+<div class="p-4 rounded-xl bg-surface/50 border border-outline-variant/10 relative overflow-hidden group hover:border-secondary transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 bg-secondary/10 text-secondary text-[10px] rounded font-bold uppercase">Confidence: 76%</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="open_in_new">open_in_new</span>
+</div>
+<p class="text-xs font-semibold text-on-surface truncate">Nordic_Grid_Phase_II_Contract.doc</p>
+<p class="text-[11px] text-on-surface-variant mt-2 line-clamp-2 italic">"Execution phase finalized for September rollout in Oslo/Stockholm sectors."</p>
+<div class="mt-3 flex items-center gap-2">
+<div class="flex-1 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[76%]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto">
+<button class="w-full py-3 border border-outline-variant/20 rounded-lg text-xs font-label-caps text-on-surface-variant hover:bg-surface-variant transition-colors">
+                        Re-scan Document Index
+                    </button>
+</div>
+</aside>
+</div>
+<!-- Fixed Bottom Input Bar -->
+<div class="absolute bottom-0 left-0 right-0 md:left-72 p-6 pointer-events-none">
+<div class="max-w-4xl mx-auto w-full pointer-events-auto">
+<div class="glass-panel rounded-2xl p-2 flex items-end gap-2 shadow-2xl relative group">
+<!-- Action Buttons -->
+<button class="h-10 w-10 flex items-center justify-center rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-variant/30 transition-all">
+<span class="material-symbols-outlined" data-icon="attach_file">attach_file</span>
+</button>
+<textarea class="flex-1 bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline-variant/60 py-3 resize-none max-h-48 overflow-y-auto" placeholder="Ask Grow RAG anything..." rows="1"></textarea>
+<button class="h-10 w-10 flex items-center justify-center rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-variant/30 transition-all">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+</button>
+<!-- Send Button with Neon Glow -->
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-primary-container text-on-primary-container hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+<div class="mt-3 text-center">
+<p class="text-[10px] text-outline-variant font-mono uppercase tracking-[0.2em]">End-to-End Encrypted | Knowledge base: 12.4GB Vectorized</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Navigation (Only visible on mobile) -->
+<footer class="fixed bottom-0 w-full md:hidden z-50 bg-surface/90 backdrop-blur-xl border-t border-outline-variant/10 flex justify-around items-center h-16 pb-safe">
+<div class="flex flex-col items-center justify-center text-primary active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-label-caps text-[10px] mt-1 uppercase">Chat</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-caps text-[10px] mt-1 uppercase">Search</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="book">book</span>
+<span class="font-label-caps text-[10px] mt-1 uppercase">Library</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-caps text-[10px] mt-1 uppercase">Profile</span>
+</div>
+</footer>
+</body></html>
