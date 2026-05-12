@@ -1,25 +1,9 @@
-# Core Dependencies
-httpx
-playwright
-beautifulsoup4
-trafilatura
-rank_bm25
-pandas
-pyarrow
+# API Dependencies (Minimal)
+fastapi
+uvicorn
 pydantic
 python-dotenv
 pyyaml
-
-# LLM APIs
-openai
-anthropic
 groq
-
-# UI
-fastapi
-uvicorn
-gunicorn
-
-# Testing & Quality
-pytest
-pytest-asyncio
+rank_bm25
+numpy
