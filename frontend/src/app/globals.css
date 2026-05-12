@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4be277;
+  --color-on-primary: #003915;
+  --color-primary-container: #22c55e;
+  --color-secondary: #4cd7f6;
+  --color-background: #0b0f0b;
+  --color-surface: #141a14;
+  --color-surface-container: #1a221a;
+  --color-on-surface: #dce5d9;
+  --color-on-surface-variant: #bccbb9;
+  --color-outline-variant: #3d4a3d;
+
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+}
+
+:root {
+    --primary: #4be277;
+    --secondary: #4cd7f6;
+    --background: #0b0f0b;
+    --surface: #141a14;
+    --on-surface: #dce5d9;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--on-surface);
+}
+
+/* Glassmorphism */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #2f372e;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* Hide sidebar scrollbar specifically */
+aside::-webkit-scrollbar {
+    display: none;
+}
+aside {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* AI Pulse Animation */
+.ai-pulse {
+    background: radial-gradient(circle, #4be277 0%, #4cd7f6 100%);
+    animation: pulse-glow 3s infinite ease-in-out;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Message Styles */
+.user-msg-container, .bot-msg-container {
+    animation: slide-up 0.4s ease-out;
+}
+
+@keyframes slide-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.bot-msg-bubble {
+    border-left: 4px solid var(--primary);
+    background: rgba(20, 26, 20, 0.5);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Source Link Enhancement */
+.source-link {
+    color: #3b82f6 !important;
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    transition: all 0.2s;
+}
+
+.source-link:hover {
+    color: #60a5fa !important;
+    border-bottom-color: #60a5fa;
+}
+
+/* Sidebar Hover */
+.sidebar-item:hover {
+    background: rgba(75, 226, 119, 0.05);
+    color: var(--primary);
+}

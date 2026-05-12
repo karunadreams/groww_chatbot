@@ -1,5 +1,7 @@
 import logging
 import re
+import yaml
+from pathlib import Path
 from typing import List, Dict, Optional
 from src.mf_faq.ingestion.indexer import Indexer
 
@@ -11,12 +13,21 @@ class Retriever:
         self.indexer = Indexer(index_dir)
         self.indexer.load()
         
+        # Load sources from config
+        config_path = Path("config/sources.yaml")
+        if config_path.exists():
+            with open(config_path, "r") as f:
+                sources_data = yaml.safe_load(f)
+                self.source_map = {s["id"]: s["sources"][0]["url"] for s in sources_data["schemes"]}
+        else:
+            self.source_map = {}
+
         # Scheme mapping for resolution
         self.scheme_keywords = {
             "hdfc_elss": ["elss", "tax saver", "tax saving", "tax"],
-            "hdfc_equity": ["equity", "multi cap", "multi-cap"],
-            "hdfc_focused": ["focused", "focus"],
-            "hdfc_large_cap": ["large cap", "large-cap", "bluechip"],
+            "hdfc_equity": ["equity", "multi cap", "multi-cap", "flexi cap", "flexi-cap", "flexicap"],
+            "hdfc_focused": ["focused", "focus", "focused 30", "focus 30"],
+            "hdfc_large_cap": ["large cap", "large-cap", "bluechip", "top 100", "top-100", "largecap"],
             "hdfc_mid_cap": ["mid cap", "mid-cap", "middle"]
         }
 
@@ -29,32 +40,35 @@ class Retriever:
                 resolved.append(scheme_id)
         return resolved
 
-    def retrieve(self, query: str, top_k: int = 5, threshold: float = 1.5) -> List[Dict]:
+    def retrieve(self, query: str, top_k: int = 10, threshold: float = 0.5) -> List[Dict]:
         """Unified retrieval pipeline with scheme filtering and thresholding."""
         resolved_schemes = self.resolve_schemes(query)
         
         # Search using the Indexer
-        # If schemes are resolved, we'll search across all but prioritize/filter later
-        # (The Indexer doesn't have a filter param yet, so we filter here)
-        raw_results = self.indexer.search(query, top_k=20) # Get more to filter
+        # Get more chunks initially to ensure we have enough after filtering
+        raw_results = self.indexer.search(query, top_k=30) 
         
         filtered_results = []
         for res in raw_results:
             chunk = res["chunk"]
             score = res["score"]
             
-            # Confidence Guardrail
+            # Confidence Guardrail (Low threshold for high recall)
             if score < threshold:
                 continue
                 
-            # Scheme Filtering
-            # If the user specified a scheme, only return chunks from that scheme
-            if resolved_schemes and chunk["scheme_id"] not in resolved_schemes:
-                continue
+            # Scheme Filtering (Optional)
+            if resolved_schemes:
+                if chunk["scheme_id"] not in resolved_schemes:
+                    continue
+
+            # BOOST: Atomic chunks (like Key Stats) are often shorter but high-value
+            if chunk.get("type") == "atomic":
+                score *= 1.5
             
-            filtered_results.append(res)
+            filtered_results.append({"chunk": chunk, "score": score})
             
-        # Sort and take top_k
+        # Sort by boosted score
         filtered_results.sort(key=lambda x: x["score"], reverse=True)
         return filtered_results[:top_k]
 
@@ -66,8 +80,10 @@ class Retriever:
         context_blocks = []
         for res in results:
             chunk = res["chunk"]
+            source_url = self.source_map.get(chunk['scheme_id'], "N/A")
             block = (
                 f"--- SCHEME: {chunk['scheme_id'].upper()} ---\n"
+                f"SOURCE URL: {source_url}\n"
                 f"SECTION: {chunk['section'].upper()}\n"
                 f"{chunk['content']}\n"
             )

@@ -20,9 +20,9 @@ anthropic
 groq
 
 # UI
-streamlit
 fastapi
 uvicorn
+gunicorn
 
 # Testing & Quality
 pytest

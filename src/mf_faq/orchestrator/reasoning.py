@@ -22,7 +22,9 @@ class ReasoningEngine:
         
         # Load sources for citation mapping
         import yaml
-        with open("config/sources.yaml", "r") as f:
+        root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+        config_path = os.path.join(root_dir, "config", "sources.yaml")
+        with open(config_path, "r") as f:
             sources_data = yaml.safe_load(f)
             self.source_map = {s["id"]: s["sources"][0]["url"] for s in sources_data["schemes"]}
 
@@ -40,21 +42,22 @@ class ReasoningEngine:
         """End-to-end generation with refusal and citation logic."""
         # 1. Retrieve
         results = self.retriever.retrieve(query)
-        context = self.retriever.format_context(results)
-        
-        if not results:
-            return {
-                "answer": "I'm sorry, I don't have that information in my current mutual fund database.",
-                "source": None
-            }
-
         # 2. Generate with LLM
+        context = self.retriever.format_context(results) if results else "No fund-specific data found for this query."
         system_prompt = (
-            "You are a Mutual Fund Assistant for HDFC Mutual Funds. "
-            "Use ONLY the provided context to answer the user's question. "
-            "If the answer is not contained within the context, say 'I'm sorry, I don't have that information'. "
-            "Keep your answer concise (under 3 sentences). "
-            "Do not include any personal information like names, emails, or phone numbers."
+            "You are a Facts-Only Mutual Fund Assistant for HDFC Mutual Funds. "
+            "STRICT POLICIES:\n"
+            "1. NO ADVICE: Refuse queries like 'Should I invest?' or 'Which is better?'. "
+            "   Response MUST include exactly this link: https://www.amfiindia.com/investor-corner/educational-material\n"
+            "2. NO PERFORMANCE: Do not provide return calculations. If asked about returns, "
+            "   Response MUST include exactly this link: https://www.hdfcfund.com/information/factsheet\n"
+            "3. FACTS ONLY: Only answer about Expense Ratio, Exit Load, Min SIP, ELSS lock-in, Riskometer, or Benchmark. "
+            "   Response MUST include exactly one citation link (SOURCE URL) provided in the context.\n"
+            "4. RESPONSE FORMAT:\n"
+            "   - Max 3 sentences.\n"
+            "   - Include exactly ONE relevant link (either Source URL or the refusal links above).\n"
+            "   - Footer MUST be exactly: 'Last updated from sources: [Data as of date from context]'\n"
+            "5. ALIASES: 'Focused 30' = HDFC Focused Fund, 'Top 100' = HDFC Large Cap, 'Flexi Cap' = HDFC Equity Fund."
         )
         
         user_prompt = f"Context:\n{context}\n\nQuestion: {query}"

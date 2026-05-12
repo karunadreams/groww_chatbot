@@ -36,6 +36,11 @@ class Extractor:
         # 2. Key Stats (NAV, Expense Ratio, etc.)
         stats_container = soup.find("div", class_=lambda x: x and "fundDetails_fundDetailsContainer" in x)
         if stats_container:
+            # Capture "NAV: 08 May '26"
+            nav_date_div = stats_container.find("div", string=lambda x: x and "NAV:" in x)
+            if nav_date_div:
+                data["as_of_date"] = nav_date_div.text.replace("NAV:", "").strip()
+            
             stats = stats_container.find_all("div", recursive=False)
             for stat in stats:
                 label_div = stat.find("div", class_=lambda x: x and "contentTertiary" in x)
@@ -59,13 +64,15 @@ class Extractor:
 
         # 4. Exit Load & Tax
         for section_title in ["Exit load", "Taxability", "Stamp duty"]:
-            header = soup.find(lambda tag: tag.name in ["h2", "h3"] and section_title.lower() in tag.text.lower())
+            # Check h2, h3, and h4 for section headers
+            header = soup.find(lambda tag: tag.name in ["h2", "h3", "h4"] and section_title.lower() in tag.text.lower())
             if header:
                 container = header.find_parent("div")
                 if container:
-                    # Look for specific content classes or just all text in the container
                     content = container.get_text(separator=" ", strip=True)
-                    data[f"{section_title.lower()}_section"] = content
+                    # Clean the key: replace space with underscore
+                    key_name = f"{section_title.lower().replace(' ', '_')}_section"
+                    data[key_name] = content
 
         # 5. Broad Text Extraction using Trafilatura
         # Trafilatura is great for fallback but we want to ensure table data is preserved

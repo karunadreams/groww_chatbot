@@ -154,15 +154,42 @@ These principles drive every phase of the implementation:
 
 ---
 
-## Phase 4: User Interface
-**Goal:** A clean, trustworthy entry point.
+## Phase 4: User Interface (Next.js)
+**Goal:** A clean, trustworthy entry point with a high-fidelity "Premium Stitch" design.
 
-- **Framework**: Streamlit or FastAPI + Static SPA.
-- **UX Rules**: Persistent disclaimer, example queries, streaming response, and clickable citations (rel="noopener").
+- **Framework**: Next.js (React) + Tailwind CSS + Framer Motion.
+- **UX Rules**: Persistent facts-only disclaimer, example queries, responsive chat interface, and clickable citations.
+- **Minimalist Approach**: Prioritizing transparency and accessibility over unnecessary complexity.
 
 ---
 
-## Phase 5: Evaluation & Compliance
+## Phase 5: Production Backend API (FastAPI)
+**Goal:** Decouple the reasoning logic into a scalable REST API.
+
+- **Framework**: FastAPI (Python).
+- **Security**: Strict CORS policies allowing only the Vercel frontend origin.
+- **Performance**: Asynchronous endpoint handling (`async def chat`) with Uvicorn.
+- **Observability**: Structured logging for query monitoring and RAG latency tracking.
+
+---
+
+## Phase 6: Decoupled Deployment (Render & Vercel)
+**Goal:** Professional, scalable hosting with automated CI/CD.
+
+### 6.1 Backend on Render
+- **Infrastructure**: Web Service (Dockerized).
+- **Data Persistence**: BM25 index and processed data committed to Git for instant retrieval.
+- **Automation**: GitHub Actions periodically triggers `refresh.py` and commits index updates, which Render picks up via auto-deploy.
+- **Scaling**: Configured for 256MB/512MB RAM (Low footprint).
+
+### 6.2 Frontend on Vercel
+- **Infrastructure**: Vercel Edge Network.
+- **Build Settings**: Next.js production build with environment-specific API endpoints.
+- **Integration**: Secure communication with Render backend via encrypted environment variables.
+
+---
+
+## Phase 7: Evaluation & Compliance
 **Goal:** Prove accuracy and safety via CI gates.
 
 - **Factual Suite**: 30+ Qs with gold answers (90% pass bar).

@@ -1,8 +1,10 @@
 import logging
+import yaml
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List, Dict
 from src.mf_faq.orchestrator.reasoning import ReasoningEngine
 
 # Setup logging
@@ -27,20 +29,40 @@ app.add_middleware(
 # Initialize the Reasoning Engine
 engine = ReasoningEngine()
 
+# Load schemes for /meta
+def load_schemes():
+    try:
+        # Resolve path relative to the project root
+        root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+        config_path = os.path.join(root_dir, "config", "sources.yaml")
+        with open(config_path, "r") as f:
+            data = yaml.safe_load(f)
+            return data.get("schemes", [])
+    except Exception as e:
+        logger.error(f"Failed to load schemes: {e}")
+        return []
+
 # Request/Response Models
 class QueryRequest(BaseModel):
     query: str
 
 class QueryResponse(BaseModel):
     answer: str
-    source: Optional[str] = None
+    status: str = "success"
+    sources: List[Dict[str, str]] = []
 
 @app.get("/health")
 def health_check():
     return {"status": "healthy", "engine": "ready"}
 
-@app.post("/chat", response_model=QueryResponse)
-async def chat(request: QueryRequest):
+@app.get("/meta")
+def get_meta():
+    """Returns metadata about the ingested schemes for the UI sidebar."""
+    schemes = load_schemes()
+    return {"schemes": schemes}
+
+@app.post("/ask", response_model=QueryResponse)
+async def ask(request: QueryRequest):
     """
     Primary endpoint for the FAQ assistant.
     Takes a natural language query and returns a factual answer + source.
@@ -48,9 +70,21 @@ async def chat(request: QueryRequest):
     logger.info(f"Received query: {request.query}")
     try:
         result = engine.generate_answer(request.query)
+        sources = []
+        if result["source"]:
+            # Find the scheme name for the source URL
+            schemes = load_schemes()
+            scheme_name = "HDFC Mutual Fund Source"
+            for s in schemes:
+                if s["sources"][0]["url"] == result["source"]:
+                    scheme_name = s["name"]
+                    break
+            sources.append({"scheme_name": scheme_name, "url": result["source"]})
+            
         return QueryResponse(
             answer=result["answer"],
-            source=result["source"]
+            status="success",
+            sources=sources
         )
     except Exception as e:
         logger.error(f"Error processing query: {str(e)}")

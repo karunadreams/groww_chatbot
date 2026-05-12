@@ -17,6 +17,7 @@ class Chunker:
         stats_text = (
             f"Fund: {scheme_name}\n"
             f"Section: Key Statistics\n"
+            f"Data as of: {data.get('as_of_date', 'N/A')}\n"
             f"NAV: {data.get('nav', 'N/A')}\n"
             f"Expense Ratio: {data.get('expense_ratio', 'N/A')}\n"
             f"Fund Size (AUM): {data.get('fund_size_(aum)', 'N/A')}\n"
@@ -31,7 +32,7 @@ class Chunker:
         # 2. Minimum Investment Chunk
         min_inv = data.get("minimum_investments", {})
         if min_inv:
-            inv_text = f"Fund: {scheme_name}\nSection: Minimum Investment Details\n"
+            inv_text = f"Fund: {scheme_name}\nSection: Minimum Investment Details\nData as of: {data.get('as_of_date', 'N/A')}\n"
             inv_text += "\n".join([f"{k}: {v}" for k, v in min_inv.items()])
             chunks.append({
                 "content": inv_text,
@@ -44,7 +45,7 @@ class Chunker:
             if key in data and data[key]:
                 section_name = key.replace("_", " ").title()
                 chunks.append({
-                    "content": f"Fund: {scheme_name}\nSection: {section_name}\n{data[key]}",
+                    "content": f"Fund: {scheme_name}\nSection: {section_name}\nData as of: {data.get('as_of_date', 'N/A')}\n{data[key]}",
                     "section": key,
                     "type": "atomic"
                 })
@@ -68,7 +69,7 @@ class Chunker:
                 
             # If adding this line exceeds limit, and we already have content, flush
             if current_size + len(line) > char_limit and current_chunk:
-                content = f"Fund: {scheme_name}\nSection: Fund Details\n" + "\n".join(current_chunk)
+                content = f"Fund: {scheme_name}\nSection: Fund Details\nData as of: {data.get('as_of_date', 'N/A')}\n" + "\n".join(current_chunk)
                 chunks.append({
                     "content": content,
                     "section": "general",
@@ -82,7 +83,7 @@ class Chunker:
 
         # Final flush
         if current_chunk:
-            content = f"Fund: {scheme_name}\nSection: Fund Details\n" + "\n".join(current_chunk)
+            content = f"Fund: {scheme_name}\nSection: Fund Details\nData as of: {data.get('as_of_date', 'N/A')}\n" + "\n".join(current_chunk)
             chunks.append({
                 "content": content,
                 "section": "general",
