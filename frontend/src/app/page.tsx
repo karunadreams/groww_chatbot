@@ -284,31 +284,7 @@ export default function Home() {
               </div>
             )}
 
-            {/* Right Panel: Sources (Only show when there are sources) */}
-            <aside className={`hidden ${activeSources.length > 0 ? "xl:flex" : "hidden"} w-80 h-full flex-col border-l border-outline-variant/10 bg-[#080b08] p-8 gap-8 transition-all duration-500`}>
-              <div className="flex items-center justify-between">
-                <h3 className="text-on-surface font-bold flex items-center gap-2 text-xs uppercase tracking-widest">
-                  <span className="material-symbols-outlined text-primary text-lg">verified_user</span>
-                  Sources
-                </h3>
-              </div>
-              <div className="space-y-6">
-                {activeSources.map((source, i) => (
-                  <div key={i} className="p-5 rounded-2xl bg-surface/30 border border-outline-variant/10 relative overflow-hidden group hover:border-primary/30 transition-all shadow-xl">
-                    <div className="flex justify-between items-start mb-3">
-                      <span className="px-2 py-0.5 bg-primary/10 text-primary text-[9px] rounded font-bold uppercase tracking-wider">Official Data</span>
-                    </div>
-                    <p className="text-xs font-bold text-on-surface mb-4 leading-relaxed">{source.scheme_name}</p>
-                    <a href={source.url} target="_blank" className="text-[10px] text-primary font-bold flex items-center gap-1 hover:gap-2 transition-all">
-                      Open Verification Portal <span className="material-symbols-outlined text-xs">arrow_forward</span>
-                    </a>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-auto p-4 rounded-xl bg-primary/5 border border-primary/10 text-[9px] text-on-surface-variant leading-relaxed">
-                <span className="font-bold text-primary">Compliance:</span> All data retrieved from official fund documents. Cross-verification recommended for high-stakes decisions.
-              </div>
-            </aside>
+            {/* Sources Panel Removed */}
           </div>
 
           {/* Input Bar */}
