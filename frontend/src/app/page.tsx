@@ -284,8 +284,8 @@ export default function Home() {
               </div>
             )}
 
-            {/* Right Panel: Sources */}
-            <aside className={`hidden xl:flex w-80 h-full flex-col border-l border-outline-variant/10 bg-[#080b08] p-8 gap-8 transition-all duration-500 ${activeSources.length > 0 ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}`}>
+            {/* Right Panel: Sources (Only show when there are sources) */}
+            <aside className={`hidden ${activeSources.length > 0 ? "xl:flex" : "hidden"} w-80 h-full flex-col border-l border-outline-variant/10 bg-[#080b08] p-8 gap-8 transition-all duration-500`}>
               <div className="flex items-center justify-between">
                 <h3 className="text-on-surface font-bold flex items-center gap-2 text-xs uppercase tracking-widest">
                   <span className="material-symbols-outlined text-primary text-lg">verified_user</span>
