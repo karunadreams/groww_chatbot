@@ -196,30 +196,18 @@ export default function Home() {
           </nav>
 
           <div className="mt-auto pt-6 border-t border-outline-variant/10">
-            <div className="glass-panel rounded-xl p-4 flex items-center gap-3 bg-surface/50 border border-white/5">
-              <div className="h-10 w-10 rounded-lg bg-primary/20 flex items-center justify-center">
-                <span className="material-symbols-outlined text-primary">person</span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold truncate">Enterprise Node</p>
-                <p className="text-[9px] text-primary uppercase font-bold tracking-tighter">Verified Access</p>
-              </div>
-            </div>
+            {/* User Profile Removed */}
           </div>
         </div>
       </aside>
 
       <div className="flex-1 flex flex-col relative overflow-hidden h-full bg-gradient-to-br from-[#050705] to-[#0a0f0a]">
         {/* Top AppBar */}
-        <header className="fixed top-0 w-full z-40 backdrop-blur-2xl border-b border-outline-variant/5 flex justify-between items-center h-14 px-6 md:pl-[312px] bg-surface/40">
+        <header className="fixed top-0 w-full z-40 border-b border-outline-variant/5 flex justify-between items-center h-14 px-6 md:pl-[312px] bg-black">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
               <span className="text-xs font-bold text-on-surface-variant tracking-wider uppercase">System Active</span>
-            </div>
-            <div className="hidden lg:flex items-center gap-6">
-              <a className="text-[10px] uppercase tracking-widest text-on-surface-variant hover:text-primary font-bold" href="#">Models</a>
-              <a className="text-[10px] uppercase tracking-widest text-on-surface-variant hover:text-primary font-bold" href="#">API</a>
             </div>
           </div>
           <div className="flex items-center gap-4">
