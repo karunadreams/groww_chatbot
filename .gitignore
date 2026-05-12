@@ -10,4 +10,4 @@ dist/
 *.log
 data/raw/
 data/processed/
-data/index/
+# data/index/ # We want to include the index in git for Render
