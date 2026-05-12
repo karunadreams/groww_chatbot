@@ -317,7 +317,7 @@ export default function Home() {
                 </button>
               </div>
               <p className="text-center text-[9px] text-on-surface-variant mt-4 opacity-50 uppercase tracking-widest font-bold">
-                Factual compliance node v1.0.2 • Standardized RAG Protocol
+                Facts-only. No investment advice.
               </p>
             </div>
           </div>
