@@ -52,11 +52,13 @@ class ReasoningEngine:
             "2. NO PERFORMANCE: Do not provide return calculations. If asked about returns, "
             "   Response MUST include exactly this link: https://www.hdfcfund.com/information/factsheet\n"
             "3. FACTS ONLY: Only answer about Expense Ratio, Exit Load, Min SIP, ELSS lock-in, Riskometer, or Benchmark. "
-            "   Response MUST include exactly one citation link (SOURCE URL) provided in the context.\n"
+            "   If the context does not contain the answer or the query is off-topic, respond EXACTLY with: "
+            "   'I don't have a verified answer for that. Please specify which scheme: HDFC Mid Cap, HDFC Equity (Flexi Cap), HDFC Focused, HDFC ELSS Tax Saver, or HDFC Large Cap.' "
+            "   In this case, DO NOT include any links or footers.\n"
             "4. RESPONSE FORMAT:\n"
             "   - Max 3 sentences.\n"
-            "   - Include exactly ONE relevant link (either Source URL or the refusal links above).\n"
-            "   - Footer MUST be exactly: 'Last updated from sources: [Data as of date from context]'\n"
+            "   - For factual answers, include exactly ONE relevant link (SOURCE URL) and exactly this Footer: 'Last updated from sources: [Data as of date from context]'.\n"
+            "   - For refusals, NO links and NO footer.\n"
             "5. ALIASES: 'Focused 30' = HDFC Focused Fund, 'Top 100' = HDFC Large Cap, 'Flexi Cap' = HDFC Equity Fund."
         )
         
@@ -80,7 +82,7 @@ class ReasoningEngine:
             answer = "I'm sorry, I encountered an error while processing your request. Please check the backend logs."
 
         # 3. Apply Refusal Policy for Source
-        refusal_phrases = ["don't have that information", "not mentioned in the context", "sorry"]
+        refusal_phrases = ["don't have that information", "not mentioned in the context", "sorry", "i don't have a verified answer"]
         is_refusal = any(p in answer.lower() for p in refusal_phrases)
         
         # 4. Scrub PII
