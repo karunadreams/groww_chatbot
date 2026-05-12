@@ -62,17 +62,32 @@ class Extractor:
                 min_inv[label] = value
             data["minimum_investments"] = min_inv
 
-        # 4. Exit Load & Tax
-        for section_title in ["Exit load", "Taxability", "Stamp duty"]:
-            # Check h2, h3, and h4 for section headers
-            header = soup.find(lambda tag: tag.name in ["h2", "h3", "h4"] and section_title.lower() in tag.text.lower())
+        # 4. Exit Load & Tax & Lock-in
+        for section_title in ["Exit load", "Taxability", "Stamp duty", "Lock-in"]:
+            # Check h1-h6 for section headers
+            header = soup.find(lambda tag: tag.name in ["h2", "h3", "h4", "h5", "h6"] and section_title.lower() in tag.text.lower())
             if header:
                 container = header.find_parent("div")
                 if container:
                     content = container.get_text(separator=" ", strip=True)
                     # Clean the key: replace space with underscore
-                    key_name = f"{section_title.lower().replace(' ', '_')}_section"
+                    key_name = f"{section_title.lower().replace(' ', '_').replace('-', '_')}_section"
                     data[key_name] = content
+            else:
+                # Fallback: Search for specific semantic spans
+                keyword_tag = soup.find(string=lambda x: x and section_title.lower() in x.lower())
+                if keyword_tag:
+                    parent = keyword_tag.find_parent(["div", "p", "span"])
+                    if parent:
+                        data[f"{section_title.lower().replace(' ', '_')}_fallback"] = parent.get_text(strip=True)
+
+        # 5. Specialized Check for ELSS Lock-in
+        if "elss" in data.get("fund_name", "").lower():
+            lockin_span = soup.find("span", string=lambda x: x and "lock-in" in x.lower())
+            if lockin_span:
+                data["lock_in_period"] = lockin_span.get_text(strip=True)
+            elif "3y lock-in" in html_content.lower():
+                data["lock_in_period"] = "3 years (standard for ELSS)"
 
         # 5. Broad Text Extraction using Trafilatura
         # Trafilatura is great for fallback but we want to ensure table data is preserved

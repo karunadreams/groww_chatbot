@@ -40,8 +40,13 @@ class Chunker:
                 "type": "atomic"
             })
         
-        # 3. Exit Load / Tax Sections
-        for key in ["exit_load_section", "taxability_section", "stamp_duty_section"]:
+        # 3. Exit Load / Tax Sections / Lock-in / Fallbacks
+        special_keys = [
+            "exit_load_section", "taxability_section", "stamp_duty_section", 
+            "lock_in_period", "lock_in_section", "lock_in_fallback",
+            "exit_load_fallback", "taxability_fallback"
+        ]
+        for key in special_keys:
             if key in data and data[key]:
                 section_name = key.replace("_", " ").title()
                 chunks.append({
