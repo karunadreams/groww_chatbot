@@ -40,7 +40,7 @@ class Retriever:
                 resolved.append(scheme_id)
         return resolved
 
-    def retrieve(self, query: str, top_k: int = 10, threshold: float = 0.5) -> List[Dict]:
+    def retrieve(self, query: str, top_k: int = 10, threshold: float = 0.3) -> List[Dict]:
         """Unified retrieval pipeline with scheme filtering and thresholding."""
         resolved_schemes = self.resolve_schemes(query)
         
