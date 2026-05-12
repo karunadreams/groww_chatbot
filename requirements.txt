@@ -3,10 +3,6 @@ httpx
 playwright
 beautifulsoup4
 trafilatura
-langchain
-llama-index
-sentence-transformers
-faiss-cpu
 rank_bm25
 pandas
 pyarrow
@@ -27,6 +23,3 @@ gunicorn
 # Testing & Quality
 pytest
 pytest-asyncio
-black
-isort
-flake8
