@@ -229,7 +229,7 @@ export default function Home() {
                   </div>
                 </div>
                 <h2 className="text-5xl font-bold text-on-surface mb-4 tracking-tighter">
-                  Enterprise <span className="text-primary italic">Intelligence</span>.
+                  How can I <span className="text-primary italic">help you today?</span>
                 </h2>
                 <p className="text-on-surface-variant text-base max-w-xl mx-auto leading-relaxed mb-10 opacity-70">
                   Standardized RAG interface for HDFC Mutual Fund analysis.<br/>
