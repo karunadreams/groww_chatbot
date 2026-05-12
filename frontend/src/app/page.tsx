@@ -202,24 +202,8 @@ export default function Home() {
       </aside>
 
       <div className="flex-1 flex flex-col relative overflow-hidden h-full bg-gradient-to-br from-[#050705] to-[#0a0f0a]">
-        {/* Top AppBar */}
-        <header className="fixed top-0 w-full z-40 border-b border-outline-variant/5 flex justify-between items-center h-14 px-6 md:pl-[312px] bg-black">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-              <span className="text-xs font-bold text-on-surface-variant tracking-wider uppercase">System Active</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-[10px] uppercase tracking-wider text-primary font-bold">
-              Facts-only mode
-            </div>
-            <span className="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer text-xl">account_circle</span>
-          </div>
-        </header>
-
         {/* Main Content */}
-        <main className="flex-1 pt-14 pb-28 flex flex-col relative overflow-hidden h-full">
+        <main className="flex-1 pt-8 pb-28 flex flex-col relative overflow-hidden h-full">
           <div className="flex-1 flex overflow-hidden h-full">
             {view === "welcome" ? (
               <div className="flex-1 flex flex-col items-center justify-center p-6 text-center animate-slide-up">
