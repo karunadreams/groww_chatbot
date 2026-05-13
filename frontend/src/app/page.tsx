@@ -28,6 +28,7 @@ export default function Home() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [schemes, setSchemes] = useState<Scheme[]>([]);
   const [activeSources, setActiveSources] = useState<Source[]>([]);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -116,8 +117,22 @@ export default function Home() {
     inputRef.current?.focus();
   };
 
+  const handleEdit = (text: string) => {
+    setInput(text);
+    inputRef.current?.focus();
+  };
+
+  const handleCopy = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   const formatResponse = (text: string) => {
-    return text.split("\n").map((line, i) => {
+    // Always put "please visit:" on a new line
+    const processedText = text.replace(/([^\n])\s*(please visit:)/gi, "$1\n$2");
+
+    return processedText.split("\n").map((line, i) => {
       // Bold text handling **text**
       const parts = line.split(/(\*\*.*?\*\*)/g);
       return (
@@ -146,18 +161,20 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#050705] text-on-surface font-sans overflow-hidden h-screen flex">
+    <div className="bg-background text-on-surface font-sans overflow-hidden h-screen flex">
       {/* Sidebar */}
-      <aside className="h-full w-72 hidden md:flex flex-col border-r border-outline-variant/10 bg-[#080b08] z-50">
+      <aside className="h-full w-72 hidden md:flex flex-col border-r border-outline-variant/10 bg-surface z-50">
         <div className="flex flex-col h-full p-6">
           <div className="mb-8">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="material-symbols-outlined text-surface text-xl font-bold">hub</span>
-              </div>
+            <img 
+              src="/logo.png" 
+              alt="HDFC Logo" 
+              className="w-10 h-10 object-contain"
+            />
               <h1 className="text-xl font-bold text-on-surface tracking-tight">Grow RAG</h1>
             </div>
-            <p className="text-[10px] text-primary uppercase tracking-[0.2em] mt-2 font-bold opacity-70">Enterprise Intelligence</p>
+            <p className="text-[10px] text-primary uppercase tracking-[0.2em] mt-2 font-bold opacity-70">Mutual Fund FAQ Assistant</p>
           </div>
 
           <div className="space-y-3 mb-10">
@@ -201,16 +218,18 @@ export default function Home() {
         </div>
       </aside>
 
-      <div className="flex-1 flex flex-col relative overflow-hidden h-full bg-gradient-to-br from-[#050705] to-[#0a0f0a]">
+      <div className="flex-1 flex flex-col relative overflow-hidden h-full bg-gradient-to-br from-black to-surface">
         {/* Main Content */}
         <main className="flex-1 pt-8 pb-28 flex flex-col relative overflow-hidden h-full">
           <div className="flex-1 flex overflow-hidden h-full">
             {view === "welcome" ? (
               <div className="flex-1 flex flex-col items-center justify-center p-6 text-center animate-slide-up">
                 <div className="mb-8 p-1 rounded-3xl bg-surface-variant border border-outline-variant/20 shadow-2xl">
-                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-[#2d5c3a] flex items-center justify-center ai-pulse shadow-[0_0_40px_rgba(75,226,119,0.2)]">
-                    <span className="material-symbols-outlined text-surface text-4xl font-bold">hub</span>
-                  </div>
+                  <img 
+                    src="/logo.png" 
+                    alt="HDFC Logo" 
+                    className="w-24 h-24 object-contain animate-pulse shadow-[0_0_40px_rgba(75,226,119,0.2)]"
+                  />
                 </div>
                 <h2 className="text-5xl font-bold text-on-surface mb-4 tracking-tighter">
                   How can I <span className="text-primary italic">help you today?</span>
@@ -221,19 +240,19 @@ export default function Home() {
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl w-full">
                   <div onClick={() => setInputText("What is the expense ratio of HDFC Mid Cap?")} className="p-6 rounded-2xl border border-outline-variant/10 hover:border-primary/40 cursor-pointer group bg-surface/20 backdrop-blur-sm transition-all hover:translate-y-[-4px]">
-                    <span className="material-symbols-outlined text-primary mb-3 text-2xl">percent</span>
-                    <h3 className="text-on-surface text-sm font-bold">Expense Ratio</h3>
-                    <p className="text-[10px] text-on-surface-variant mt-2">Check current fund management costs</p>
+                    <span className="material-symbols-outlined text-primary mb-3 text-3xl">percent</span>
+                    <h3 className="text-on-surface text-base font-bold">Expense Ratio</h3>
+                    <p className="text-xs text-on-surface-variant mt-2">Check current fund management costs</p>
                   </div>
                   <div onClick={() => setInputText("What is the exit load of HDFC Equity Fund?")} className="p-6 rounded-2xl border border-outline-variant/10 hover:border-primary/40 cursor-pointer group bg-surface/20 backdrop-blur-sm transition-all hover:translate-y-[-4px]">
-                    <span className="material-symbols-outlined text-secondary mb-3 text-2xl">payments</span>
-                    <h3 className="text-on-surface text-sm font-bold">Exit Load</h3>
-                    <p className="text-[10px] text-on-surface-variant mt-2">Verify redemption penalty terms</p>
+                    <span className="material-symbols-outlined text-secondary mb-3 text-3xl">payments</span>
+                    <h3 className="text-on-surface text-base font-bold">Exit Load</h3>
+                    <p className="text-xs text-on-surface-variant mt-2">Verify redemption penalty terms</p>
                   </div>
                   <div onClick={() => setInputText("What is the lock-in period for HDFC ELSS?")} className="p-6 rounded-2xl border border-outline-variant/10 hover:border-primary/40 cursor-pointer group bg-surface/20 backdrop-blur-sm transition-all hover:translate-y-[-4px]">
-                    <span className="material-symbols-outlined text-primary mb-3 text-2xl">lock_clock</span>
-                    <h3 className="text-on-surface text-sm font-bold">ELSS Lock-in</h3>
-                    <p className="text-[10px] text-on-surface-variant mt-2">Analyze tax-saver duration rules</p>
+                    <span className="material-symbols-outlined text-primary mb-3 text-3xl">lock_clock</span>
+                    <h3 className="text-on-surface text-base font-bold">ELSS Lock-in</h3>
+                    <p className="text-xs text-on-surface-variant mt-2">Analyze tax-saver duration rules</p>
                   </div>
                 </div>
               </div>
@@ -256,10 +275,31 @@ export default function Home() {
                           <p className={`text-[9px] uppercase tracking-[0.2em] font-bold opacity-40 ${msg.sender === "user" ? "text-right" : "text-left"}`}>
                             {msg.sender === "user" ? "Verified User" : "Grow Intelligence Agent"} • {msg.time}
                           </p>
-                          <div className={msg.sender === "user" ? "user-bubble" : "bot-bubble"}>
+                          <div className={msg.sender === "user" ? "user-bubble relative group" : "bot-bubble relative group"}>
                             <div className="text-[13px] text-on-surface leading-[1.6]">
                               {formatResponse(msg.text)}
                             </div>
+                            
+                            {msg.sender === "user" ? (
+                              <button 
+                                onClick={() => handleEdit(msg.text)}
+                                className="absolute -bottom-2 -right-2 bg-surface-container border border-outline-variant/20 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:text-primary shadow-lg"
+                                title="Edit message"
+                              >
+                                <span className="material-symbols-outlined text-[14px]">edit</span>
+                              </button>
+                            ) : (
+                              <button 
+                                onClick={() => handleCopy(msg.text, msg.id)}
+                                className="absolute -bottom-2 -right-2 bg-surface-container border border-outline-variant/20 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:text-primary shadow-lg flex items-center gap-1"
+                                title="Copy response"
+                              >
+                                <span className="material-symbols-outlined text-[14px]">
+                                  {copiedId === msg.id ? "check" : "content_copy"}
+                                </span>
+                                {copiedId === msg.id && <span className="text-[10px] font-bold">Copied!</span>}
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -291,9 +331,7 @@ export default function Home() {
           <div className="absolute bottom-0 left-0 right-0 p-8 pointer-events-none">
             <div className="max-w-4xl mx-auto w-full pointer-events-auto">
               <div className="glass-panel rounded-[24px] p-2.5 flex items-end gap-3 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative group border border-white/5 bg-surface/60">
-                <button className="h-11 w-11 flex items-center justify-center rounded-xl text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-all">
-                  <span className="material-symbols-outlined text-xl">attach_file</span>
-                </button>
+
                 <textarea
                   ref={inputRef}
                   value={input}
@@ -306,7 +344,7 @@ export default function Home() {
                   }}
                   rows={1}
                   className="flex-1 bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-on-surface-variant/20 py-3 resize-none outline-none text-[15px] max-h-40"
-                  placeholder="Ask Grow Intelligence Agent..."
+                  placeholder="Ask Mutual Fund FAQ Assistant..."
                 ></textarea>
                 <button
                   onClick={handleSend}

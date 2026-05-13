@@ -5,12 +5,12 @@
   --color-on-primary: #003915;
   --color-primary-container: #22c55e;
   --color-secondary: #4cd7f6;
-  --color-background: #0b0f0b;
-  --color-surface: #141a14;
-  --color-surface-container: #1a221a;
+  --color-background: #000000;
+  --color-surface: #0a0a0a;
+  --color-surface-container: #111111;
   --color-on-surface: #dce5d9;
   --color-on-surface-variant: #bccbb9;
-  --color-outline-variant: #3d4a3d;
+  --color-outline-variant: #222222;
 
   --radius-xl: 0.75rem;
   --radius-2xl: 1rem;
@@ -20,8 +20,8 @@
 :root {
     --primary: #4be277;
     --secondary: #4cd7f6;
-    --background: #0b0f0b;
-    --surface: #141a14;
+    --background: #000000;
+    --surface: #0a0a0a;
     --on-surface: #dce5d9;
 }
 
