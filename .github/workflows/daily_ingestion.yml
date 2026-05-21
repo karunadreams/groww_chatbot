@@ -29,6 +29,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install -r requirements-ingestion.txt
           # Specific install for rank_bm25 as it's our current fallback
           pip install rank_bm25
 
