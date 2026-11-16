@@ -1,7 +1,7 @@
 {
     "model_name": "BM25Okapi",
     "type": "sparse",
-    "total_chunks": 72,
-    "created_at": "1794744678.3900805",
+    "total_chunks": 71,
+    "created_at": "1794834250.3828259",
     "status": "DLL_FALLBACK_ACTIVE"
 }
